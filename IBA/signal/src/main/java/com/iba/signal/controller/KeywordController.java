@@ -31,5 +31,29 @@ public class KeywordController {
         }
         return new ResponseEntity<>(keyword, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<Keywords> createKeyword(@RequestBody Keywords keyword) {
+        Keywords createdKeyword = keywordService.createKeyword(keyword);
+        return new ResponseEntity<>(createdKeyword, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Keywords> updateKeyword(@PathVariable("id") Long id, @RequestBody Keywords keywordDetails) {
+        Keywords updatedKeyword = keywordService.updateKeyword(id, keywordDetails);
+        if (updatedKeyword == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedKeyword, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteKeyword(@PathVariable("id") Long id) {
+        boolean deleted = keywordService.deleteKeyword(id);
+        if (!deleted) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
 

@@ -17,6 +17,12 @@ public class Keywords {
     public Keywords() {
     }
 
+    public Keywords(long l, String string, String string2) {
+        this.id = l;
+        this.name = string;
+        this.description = string2;
+    }
+
     // Getters and setters
     public Long getId() {
         return id;

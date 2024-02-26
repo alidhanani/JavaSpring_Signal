@@ -16,7 +16,7 @@ The application is developed with the idea of
 
 To run the application execute the following command:
 
-```
+````
 docker-compose up
 ````
 
@@ -118,3 +118,15 @@ For Keywords some Example API are:
     HTTP Status Codes:
     204 No Content: Keyword successfully deleted.
     404 Not Found: Keyword with the specified ID not found.
+
+### Swagger
+The following API redirects to the swagger UI
+- /swagger-ui/index.html
+
+### Actuator
+The following API is linked to health checkup of the API
+- /actuator
+- /actuator/health
+
+
+- https://www.baeldung.com/spring-rest-openapi-documentation

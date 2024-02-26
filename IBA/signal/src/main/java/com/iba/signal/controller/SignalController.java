@@ -112,4 +112,45 @@ public class SignalController {
         return new ResponseEntity<>(signal, HttpStatus.OK);
     }
 
+    @PostMapping("/withKeywords")
+    public ResponseEntity<Signals> createSignalByKeyword(@RequestBody SignalDTO signal) {
+        Signals createdSignal = signalService.createSignalsWithKeywords(signal);
+        return new ResponseEntity<>(createdSignal, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/withKeywords/{nodeId}")
+    public ResponseEntity<Signals> updateSignalByKeyword(HttpServletRequest request, @RequestBody SignalDTO signalDetails) {
+        // Extracting the full path from the request URL
+        String fullPath = request.getRequestURI();
+
+        // Extracting nodeId from the full path
+        String[] pathSegments = fullPath.split("/");
+        String nodeId = pathSegments[pathSegments.length - 1]; // Last segment
+        
+        // URL decode the nodeId string
+        String decodedNodeId = URLDecoder.decode(nodeId, StandardCharsets.UTF_8);
+        Signals updatedSignal = signalService.updateSignalsWithKeywords(decodedNodeId, signalDetails);
+        if (updatedSignal == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedSignal, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/withKeywords/{nodeId}")
+    public ResponseEntity<Void> deleteSignalByKeyword(HttpServletRequest request) {
+        // Extracting the full path from the request URL
+        String fullPath = request.getRequestURI();
+
+        // Extracting nodeId from the full path
+        String[] pathSegments = fullPath.split("/");
+        String nodeId = pathSegments[pathSegments.length - 1]; // Last segment
+        
+        // URL decode the nodeId string
+        String decodedNodeId = URLDecoder.decode(nodeId, StandardCharsets.UTF_8);
+        boolean deleted = signalService.deleteSignalsWithKeywordByNodeId(decodedNodeId);
+        if (!deleted) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

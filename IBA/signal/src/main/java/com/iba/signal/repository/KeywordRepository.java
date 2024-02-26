@@ -7,5 +7,6 @@ import com.iba.signal.modal.Keywords;
 
 @Repository
 public interface KeywordRepository extends JpaRepository<Keywords, Long> {
+    Keywords findByName(String name);
 }
 

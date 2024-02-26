@@ -128,6 +128,62 @@ public class SignalService {
         return signalDTO;
     }
     
+    public Signals createSignalsWithKeywords(SignalDTO signals) {
+        Signals signal = new Signals();
+        signal.setNodeId(signals.getNodeId());
+        signal.setSamplingIntervalMs(signals.getSamplingIntervalMs());
+        signal.setDeadbandValue(signals.getDeadbandValue());
+        signal.setDeadbandType(signals.getDeadbandType());
+        signal.setActive(signals.getActive());
+        
+        // Convert keyword names to IDs
+        String keywordIds = convertKeywordNamesToIds(signals.getKeywords());
+        signal.setKeywords(keywordIds);
+
+        return signalRepository.save(signal);
+    }
+
+    public Signals updateSignalsWithKeywords(String nodeId, SignalDTO signals) {
+        Signals signalToUpdate = signalRepository.findById(nodeId).orElse(null);
+        if (signalToUpdate == null) {
+            return null; // Signal not found
+        }
+        // Update signal properties
+        signalToUpdate.setNodeId(signals.getNodeId());
+        signalToUpdate.setSamplingIntervalMs(signals.getSamplingIntervalMs());
+        signalToUpdate.setDeadbandValue(signals.getDeadbandValue());
+        signalToUpdate.setDeadbandType(signals.getDeadbandType());
+        signalToUpdate.setActive(signals.getActive());
+        // Convert keyword names to IDs
+        String keywordIds = convertKeywordNamesToIds(signals.getKeywords());
+        signalToUpdate.setKeywords(keywordIds);
+        return signalRepository.save(signalToUpdate);
+    }
+    
+    public boolean deleteSignalsWithKeywordByNodeId(String nodeId) {
+        Signals signalToDelete = signalRepository.findById(nodeId).orElse(null);
+        if (signalToDelete == null) {
+            return false; // Signal not found
+        }
+        signalRepository.delete(signalToDelete);
+        return true;
+    }
+
+    private String convertKeywordNamesToIds(List<String> keywordNames) {
+        if (keywordNames == null || keywordNames.isEmpty()) {
+            return "";
+        }
+        System.out.println(keywordNames);
+        List<String> keywordIds = new ArrayList<>();
+        for (String name : keywordNames) {
+            Keywords keyword = keywordRepository.findByName(name);
+            System.out.println(keyword);
+            if (keyword != null) {
+                keywordIds.add(keyword.getId().toString());
+            }
+        }
+        return "{" + String.join(";", keywordIds) + "}";
+    }
     
 }
 

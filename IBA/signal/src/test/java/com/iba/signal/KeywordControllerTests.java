@@ -29,6 +29,7 @@ class KeywordControllerTests {
     @InjectMocks
     private KeywordController keywordController;
 
+    @SuppressWarnings("deprecation")
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -77,7 +78,7 @@ class KeywordControllerTests {
         assertNull(responseEntity.getBody());
     }
 
-       @Test
+    @Test
     void testUpdateKeyword_Success() {
         // Mock KeywordService
         Keywords mockKeyword = new Keywords(1L, "Test Keyword", "Description");
